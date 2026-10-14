@@ -13,6 +13,7 @@
  *
  * Build (target): gcc -o robot-eye pixpaper-213-m-robot-eye-kakip.c -lgpiod -lm
  * (libgpiod 1.x or 2.x, see common/gpiod_compat.h)
+ * Usage: robot-eye [/dev/spidevB.C]   (default /dev/spidev1.0)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +34,7 @@
 
 #include "../../../common/gpiod_compat.h"
 
-#define EPD_SPI_DEVICE "/dev/spidev0.0"
+#define EPD_SPI_DEVICE "/dev/spidev1.0"
 #define EPD_GPIO_CHIP_LABEL "10410000.pinctrl"
 
 #define EPD_DC_PIN 60
@@ -342,8 +343,8 @@ void pick_gaze(int *tx, int *ty) {
 	} while (*tx * *tx + *ty * *ty > GAZE_MAX_X * GAZE_MAX_X);
 }
 
-int main(void) {
-	spi_fd = open(EPD_SPI_DEVICE, O_RDWR);
+int main(int argc, char **argv) {
+	spi_fd = open(argc > 1 ? argv[1] : EPD_SPI_DEVICE, O_RDWR);
 	if (spi_fd < 0) {
 		perror("Error opening SPI device");
 		exit(1);
