@@ -34,7 +34,7 @@
 #include "../../../common/gpiod_compat.h"
 
 #define EPD_SPI_DEVICE "/dev/spidev0.0"
-#define EPD_GPIO_CHIP "gpiochip0"
+#define EPD_GPIO_CHIP_LABEL "10410000.pinctrl"
 
 #define EPD_DC_PIN 60
 #define EPD_RST_PIN 87
@@ -354,7 +354,7 @@ int main(void) {
 	uint32_t speed = SPI_SPEED;
 	ioctl(spi_fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
 
-	chip = gpio_chip_open(EPD_GPIO_CHIP);
+	chip = gpio_chip_open_by_label(EPD_GPIO_CHIP_LABEL);
 	if (!chip) {
 		perror("Error opening GPIO chip");
 		exit(1);
